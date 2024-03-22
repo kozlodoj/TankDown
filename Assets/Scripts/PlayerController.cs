@@ -23,6 +23,8 @@ public class PlayerController : MonoBehaviour
 
     public GameObject Ui;
 
+    [SerializeField] Joystick moveJoystick;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -36,18 +38,20 @@ public class PlayerController : MonoBehaviour
         //set HP text
         Ui.GetComponent<UIScript>().HpTextUpdate(hP);
 
+    
+
 
     }
 
     // Update is called once per frame
     void Update()
     {
-        
-      
-        //the input keybord
-        horizontalInput = Input.GetAxis("Horizontal");
-        verticalInput = Input.GetAxis("Vertical");
 
+
+        //the input keybord
+        horizontalInput = moveJoystick.Horizontal;
+        verticalInput = moveJoystick.Vertical;
+        Debug.Log(horizontalInput + " " + verticalInput);
 
         //if there is input moving with restricted velocity
         if (horizontalInput != 0 || verticalInput != 0)
@@ -73,9 +77,10 @@ public class PlayerController : MonoBehaviour
         }
 
         //stoping when nothing is pressed
-        if (!Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.D) && !Input.GetKey(KeyCode.A)
-            && !Input.GetKey(KeyCode.UpArrow) && !Input.GetKey(KeyCode.DownArrow) && !Input.GetKey(KeyCode.RightArrow)
-            && !Input.GetKey(KeyCode.LeftArrow))
+        //if (!Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.D) && !Input.GetKey(KeyCode.A)
+            //&& !Input.GetKey(KeyCode.UpArrow) && !Input.GetKey(KeyCode.DownArrow) && !Input.GetKey(KeyCode.RightArrow)
+            //&& !Input.GetKey(KeyCode.LeftArrow))
+            if(horizontalInput == 0 && verticalInput == 0)
         {
             playerRb.velocity = playerRb.velocity * stopModifier;
 
