@@ -3,32 +3,41 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerController : MonoBehaviour
+public class PlayerControls : MonoBehaviour
 
 {
     [SerializeField]
-    Joystick leftStick;
+    private InputActionAsset controlAsset;
+    private InputActionMap gameplayMap;
+    private InputAction movement;
+    private InputAction dashAction;
 
     public float speed = 10;
-    public float dashSpeed = 100;
+    public float dashSpeed = 20;
+    public float dashTime = 0.3f;
     public float dashCooldown = 3;
     private float timeAfterDash = 3;
     private Rigidbody playerRb;
     public float velocity = 10;
-    public float stopModifier = 0.92f;
+    public float stopModifier = 0.98f;
     public GameObject cameraH;
     private bool canDash = true;
     public float height;
-    public float rotationSpeed = 0.5f;
+    public float rotationSpeed = 2f;
     public float horizontalInput;
     public float verticalInput;
     public float hP = 3;
+    private bool isDashing = false;
 
     public GameObject Ui;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
+        gameplayMap = controlAsset.FindActionMap("Gameplay");
+        movement = gameplayMap.FindAction("Movement");
+        dashAction = gameplayMap.FindAction("Dash");
+
         playerRb = gameObject.GetComponent<Rigidbody>();
         //get the camera height
         height = cameraH.GetComponent<FollowPlayer>().cameraHeight;
@@ -39,17 +48,28 @@ public class PlayerController : MonoBehaviour
         //set HP text
         Ui.GetComponent<UIScript>().HpTextUpdate(hP);
 
+        dashAction.started += context => Dash();
 
+    }
+
+    private void OnEnable()
+    {
+        gameplayMap.Enable();
+    }
+
+    private void OnDisable()
+    {
+        gameplayMap.Disable();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
-      
+
+
         //the input keybord
-        horizontalInput = Input.GetAxis("Horizontal");
-        verticalInput = Input.GetAxis("Vertical");
+        horizontalInput = movement.ReadValue<Vector2>().x;
+        verticalInput = movement.ReadValue<Vector2>().y;
 
 
         //if there is input moving with restricted velocity
@@ -69,16 +89,14 @@ public class PlayerController : MonoBehaviour
 
 
             //restrict velocity
-            if (playerRb.velocity.magnitude > velocity)
+            if (playerRb.velocity.magnitude > velocity && !isDashing)
             {
                 playerRb.velocity = Vector3.ClampMagnitude(playerRb.velocity, velocity);
             }
         }
 
         //stoping when nothing is pressed
-        if (!Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.D) && !Input.GetKey(KeyCode.A)
-            && !Input.GetKey(KeyCode.UpArrow) && !Input.GetKey(KeyCode.DownArrow) && !Input.GetKey(KeyCode.RightArrow)
-            && !Input.GetKey(KeyCode.LeftArrow))
+        if (horizontalInput == 0 && verticalInput == 0)
         {
             playerRb.velocity = playerRb.velocity * stopModifier;
 
@@ -94,7 +112,7 @@ public class PlayerController : MonoBehaviour
 
         //dashing
 
-        
+
 
         if (canDash == false)
         {
@@ -135,11 +153,16 @@ public class PlayerController : MonoBehaviour
 
     private void Dash()
     {
-        playerRb.AddForce(Vector3.forward * verticalInput * dashSpeed, ForceMode.Impulse);
-        playerRb.AddForce(Vector3.right * horizontalInput * dashSpeed, ForceMode.Impulse);
-        timeAfterDash = 0;
-        canDash = false;
-        Ui.GetComponent<UIScript>().UpdateDashCooldownText(canDash);
+        if (canDash)
+        {
+            isDashing = true;
+            StartCoroutine(DashTimer(dashTime));
+            playerRb.AddForce(Vector3.forward * verticalInput * dashSpeed, ForceMode.Impulse);
+            playerRb.AddForce(Vector3.right * horizontalInput * dashSpeed, ForceMode.Impulse);
+            timeAfterDash = 0;
+            canDash = false;
+            Ui.GetComponent<UIScript>().UpdateDashCooldownText(canDash);
+        }
 
 
     }
@@ -152,8 +175,14 @@ public class PlayerController : MonoBehaviour
         speed /= speedMultyplier;
         velocity /= speedMultyplier;
     }
-    
 
-    
+    private IEnumerator DashTimer(float dashTime)
+    {
+        yield return new WaitForSeconds(dashTime);
+        isDashing = false;
+
+    }
+
+
 
 }
