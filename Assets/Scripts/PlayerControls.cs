@@ -28,8 +28,11 @@ public class PlayerControls : MonoBehaviour
     public float verticalInput;
     public float hP = 3;
     private bool isDashing = false;
+    private bool leftDashBound = true;
 
     public GameObject Ui;
+
+    private int test;
 
     // Start is called before the first frame update
     void Awake()
@@ -66,18 +69,40 @@ public class PlayerControls : MonoBehaviour
     void Update()
     {
 
-
+        
         //the input keybord
-        horizontalInput = movement.ReadValue<Vector2>().x;
-        verticalInput = movement.ReadValue<Vector2>().y;
+        horizontalInput = movement.ReadValue<Vector2>().x * 2;
+        verticalInput = movement.ReadValue<Vector2>().y * 2;
 
-
+        
         //if there is input moving with restricted velocity
         if (horizontalInput != 0 || verticalInput != 0)
         {
-            playerRb.AddForce(Vector3.forward * verticalInput * speed);
-            playerRb.AddForce(Vector3.right * horizontalInput * speed);
-
+            
+            if (Mathf.Abs(horizontalInput) > 1 && Mathf.Abs(verticalInput) > 1)
+            {
+                
+                playerRb.AddForce(Vector3.forward * (verticalInput / Mathf.Abs(verticalInput)) * speed);
+                playerRb.AddForce(Vector3.right * (horizontalInput / Mathf.Abs(horizontalInput)) * speed);
+            }
+            else if (Mathf.Abs(horizontalInput) > 1)
+            {
+                
+                playerRb.AddForce(Vector3.forward * verticalInput * speed);
+                playerRb.AddForce(Vector3.right * (horizontalInput / Mathf.Abs(horizontalInput)) * speed);
+            }
+            else if (Mathf.Abs(verticalInput) > 1)
+            {
+                
+                playerRb.AddForce(Vector3.forward * (verticalInput / Mathf.Abs(verticalInput)) * speed);
+                playerRb.AddForce(Vector3.right * horizontalInput * speed);
+            }
+            else
+            {
+                
+                playerRb.AddForce(Vector3.forward * verticalInput * speed);
+                playerRb.AddForce(Vector3.right * horizontalInput * speed);
+            }
             //rotation
             Vector3 playerPos = playerRb.position;
             Vector3 movement = new Vector3(horizontalInput, 0, verticalInput).normalized;
@@ -112,12 +137,20 @@ public class PlayerControls : MonoBehaviour
 
         //dashing
 
+        if (Mathf.Abs(horizontalInput) > 1.9f || Mathf.Abs(verticalInput) > 1.9f)
+        {
+            Dash();
+        }
 
 
         if (canDash == false)
         {
             timeAfterDash += Time.deltaTime;
-            if (timeAfterDash >= dashCooldown)
+            if (Mathf.Abs(horizontalInput) < 1f && Mathf.Abs(verticalInput) < 1f)
+            {
+                leftDashBound = true;
+            }
+            if (timeAfterDash >= dashCooldown && leftDashBound)
             {
                 canDash = true;
                 Ui.GetComponent<UIScript>().UpdateDashCooldownText(canDash);
@@ -125,10 +158,6 @@ public class PlayerControls : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.Space) && canDash)
-        {
-            Dash();
-        }
 
 
         //dead
@@ -153,12 +182,13 @@ public class PlayerControls : MonoBehaviour
 
     private void Dash()
     {
-        if (canDash)
+        if (canDash && leftDashBound)
         {
             isDashing = true;
+            leftDashBound = false;
             StartCoroutine(DashTimer(dashTime));
-            playerRb.AddForce(Vector3.forward * verticalInput * dashSpeed, ForceMode.Impulse);
-            playerRb.AddForce(Vector3.right * horizontalInput * dashSpeed, ForceMode.Impulse);
+            playerRb.AddForce(Vector3.forward * (verticalInput / 2) * dashSpeed, ForceMode.Impulse);
+            playerRb.AddForce(Vector3.right * (horizontalInput / 2) * dashSpeed, ForceMode.Impulse);
             timeAfterDash = 0;
             canDash = false;
             Ui.GetComponent<UIScript>().UpdateDashCooldownText(canDash);

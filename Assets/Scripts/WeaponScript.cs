@@ -26,6 +26,7 @@ public class WeaponScript : MonoBehaviour
     private GameObject player;
     private GameObject hole;
     public GameObject UI;
+  
     
     // Start is called before the first frame update
     void Awake()
@@ -47,6 +48,9 @@ public class WeaponScript : MonoBehaviour
 
         aim.performed += context => LookDirection(context);
 
+        aim.performed += context => ShootWithStick(context);
+        aim.canceled += context => ShootWithStick(context);
+
         fire.started += context => Shooting(context);
         fire.canceled += context => Shooting(context);
 
@@ -58,7 +62,7 @@ public class WeaponScript : MonoBehaviour
     void Update()
     {
         transform.position = player.transform.position + new Vector3(0, 0.5f, -0.088f);
-
+        
         
         //rotate
         //Vector3 mousePos = Input.mousePosition;
@@ -147,6 +151,26 @@ public class WeaponScript : MonoBehaviour
             shooting = true;
         }
         else {
+            shooting = false;
+        }
+
+
+    }
+
+    private void ShootWithStick(InputAction.CallbackContext context)
+    {
+        
+        Vector2 vector = context.ReadValue<Vector2>();
+       
+        if (Mathf.Abs(vector.x) > 0.8f || Mathf.Abs(vector.y) > 0.8f)
+        {
+            shooting = true;
+            
+
+        }
+
+        if (Mathf.Abs(vector.x) < 0.5f && Mathf.Abs(vector.y) < 0.5f)
+        {
             shooting = false;
         }
     }
