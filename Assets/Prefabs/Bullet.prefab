@@ -147,7 +147,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 432b0d3ab4d8442c6813cd398c99c3d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 100000
+  speed: 50000
   lifeTime: 2
   damage: 1
   trailConfig: {fileID: 11400000, guid: f639ca2a7b4184736925c7b2347d1f60, type: 2}
