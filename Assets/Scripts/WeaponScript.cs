@@ -26,6 +26,7 @@ public class WeaponScript : MonoBehaviour
     private GameObject player;
     private GameObject hole;
     public GameObject UI;
+    public bool touchControls;
   
     
     // Start is called before the first frame update
@@ -48,9 +49,11 @@ public class WeaponScript : MonoBehaviour
 
         aim.performed += context => LookDirection(context);
 
-        aim.performed += context => ShootWithStick(context);
-        aim.canceled += context => ShootWithStick(context);
-
+        if (touchControls)
+        {
+            aim.performed += context => ShootWithStick(context);
+            aim.canceled += context => ShootWithStick(context);
+        }
         fire.started += context => Shooting(context);
         fire.canceled += context => Shooting(context);
 

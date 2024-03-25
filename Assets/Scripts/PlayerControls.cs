@@ -29,6 +29,7 @@ public class PlayerControls : MonoBehaviour
     public float hP = 3;
     private bool isDashing = false;
     private bool leftDashBound = true;
+    public bool touchControls = false;
 
     public GameObject Ui;
 
@@ -136,25 +137,37 @@ public class PlayerControls : MonoBehaviour
         }
 
         //dashing
-
-        if (Mathf.Abs(horizontalInput) > 1.9f || Mathf.Abs(verticalInput) > 1.9f)
+        if (touchControls)
         {
-            Dash();
+            if (Mathf.Abs(horizontalInput) > 1.9f || Mathf.Abs(verticalInput) > 1.9f)
+            {
+                Dash();
+            }
         }
-
 
         if (canDash == false)
         {
             timeAfterDash += Time.deltaTime;
-            if (Mathf.Abs(horizontalInput) < 1f && Mathf.Abs(verticalInput) < 1f)
+            if (touchControls)
             {
-                leftDashBound = true;
-            }
-            if (timeAfterDash >= dashCooldown && leftDashBound)
-            {
-                canDash = true;
-                Ui.GetComponent<UIScript>().UpdateDashCooldownText(canDash);
+                if (Mathf.Abs(horizontalInput) < 1f && Mathf.Abs(verticalInput) < 1f)
+                {
+                    leftDashBound = true;
+                }
+                if (timeAfterDash >= dashCooldown && leftDashBound)
+                {
+                    canDash = true;
+                    Ui.GetComponent<UIScript>().UpdateDashCooldownText(canDash);
 
+                }
+            }
+            else {
+                if (timeAfterDash >= dashCooldown)
+                {
+                    canDash = true;
+                    Ui.GetComponent<UIScript>().UpdateDashCooldownText(canDash);
+
+                }
             }
         }
 
@@ -182,10 +195,20 @@ public class PlayerControls : MonoBehaviour
 
     private void Dash()
     {
-        if (canDash && leftDashBound)
+
+        if (canDash && leftDashBound && touchControls)
         {
             isDashing = true;
             leftDashBound = false;
+            StartCoroutine(DashTimer(dashTime));
+            playerRb.AddForce(Vector3.forward * (verticalInput / 2) * dashSpeed, ForceMode.Impulse);
+            playerRb.AddForce(Vector3.right * (horizontalInput / 2) * dashSpeed, ForceMode.Impulse);
+            timeAfterDash = 0;
+            canDash = false;
+            Ui.GetComponent<UIScript>().UpdateDashCooldownText(canDash);
+        }
+        else {
+            isDashing = true;
             StartCoroutine(DashTimer(dashTime));
             playerRb.AddForce(Vector3.forward * (verticalInput / 2) * dashSpeed, ForceMode.Impulse);
             playerRb.AddForce(Vector3.right * (horizontalInput / 2) * dashSpeed, ForceMode.Impulse);
