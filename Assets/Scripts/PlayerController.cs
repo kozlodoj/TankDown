@@ -6,9 +6,7 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 
 {
-    [SerializeField]
-    Joystick leftStick;
-
+  
     public float speed = 10;
     public float dashSpeed = 100;
     public float dashCooldown = 3;

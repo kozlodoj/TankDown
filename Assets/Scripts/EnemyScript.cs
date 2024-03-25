@@ -10,6 +10,7 @@ public class EnemyScript : MonoBehaviour
     private Vector3 target;
     public float speed = 10;
     public float damage = 1;
+    public float velocity = 10;
 
     // Start is called before the first frame update
     void Start()
@@ -31,7 +32,12 @@ public class EnemyScript : MonoBehaviour
         target = player.transform.position;
         Vector3 lookDirection = (target - transform.position).normalized;
         GetComponent<Rigidbody>().AddForce(lookDirection * speed);
-       
+
+        if (GetComponent<Rigidbody>().velocity.magnitude > velocity)
+        {
+            GetComponent<Rigidbody>().velocity = Vector3.ClampMagnitude(GetComponent<Rigidbody>().velocity, velocity);
+        }
+
 
     }
 

@@ -147,5 +147,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hP: 10
-  speed: 75
+  speed: 50
   damage: 1
