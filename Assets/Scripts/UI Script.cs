@@ -11,8 +11,9 @@ public class UIScript : MonoBehaviour
     public TextMeshProUGUI currentWeaponText;
     public TextMeshProUGUI hpText;
     public TextMeshProUGUI speedUpText;
+    public TextMeshProUGUI LevelText;
 
-    
+
     public GameObject player;
 
     
@@ -75,6 +76,11 @@ public class UIScript : MonoBehaviour
     {
         speedUpText.SetText("SpeedUp: " + timeLeft);
 
+    }
+
+    public void LevelTextSetUp(int level, int xp)
+    {
+        LevelText.SetText("Level " + level + " XP " + xp);
     }
 
 }
