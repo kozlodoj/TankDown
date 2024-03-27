@@ -25,7 +25,7 @@ public class EnemyScript : MonoBehaviour
         //track HP, destroy after 0
         if (hP <= 0)
         {
-            player.GetComponent<StatsScript>().AddXp(10);
+            player.GetComponent<StatsScript>().AddXp(50);
             Destroy(gameObject);
             
         }

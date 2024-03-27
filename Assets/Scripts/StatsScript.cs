@@ -14,7 +14,7 @@ public class StatsScript : LevelSystem
         { "Speed", 1 },
         { "HP", 1 }
     };
-    private int xp;
+    private int xp = 0;
     private int level;
     private int statPoints = 5;
     [SerializeField]
@@ -31,12 +31,13 @@ public class StatsScript : LevelSystem
     void Start()
     {
         
-        xp = 90;
-        level = Level(xp);
-        UI.GetComponent<UIScript>().LevelTextSetUp(Level(xp), xp);
-        hp = HP(4);
-
         
+        level = Level(xp);
+        hp = HP(4);
+        UI.GetComponent<UIScript>().LevelTextSetUp(Level(xp), xp);
+        UI.GetComponent<UIScript>().HpTextUpdate(hp);
+
+
     }
 
    
@@ -86,6 +87,13 @@ public class StatsScript : LevelSystem
     public void AddXp(int xpToAdd)
     {
         xp += xpToAdd;
-        UI.GetComponent<UIScript>().LevelTextSetUp(Level(xp), xp);
+        UI.GetComponent<UIScript>().LevelTextSetUp(Level(xp), xpNormalizer(xp));
+        UI.GetComponent<UIScript>().addXp(XpProgressFill(xp));
+        
+    }
+
+    public void setStatPoints(int amount)
+    {
+        statPoints = amount;
     }
 }

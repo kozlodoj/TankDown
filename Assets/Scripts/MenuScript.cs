@@ -249,6 +249,7 @@ public class MenuScript : MonoBehaviour
     public void ApplyAndExit()
     {
         player.GetComponent<StatsScript>().FillInStats(Stats);
+        player.GetComponent<StatsScript>().setStatPoints(statPoints);
         foreach (Transform child in GameObject.Find("Buttons").transform)
         {
             if (child.tag == "Minus Button")

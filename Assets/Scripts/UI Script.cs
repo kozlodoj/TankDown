@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class UIScript : MonoBehaviour
 {
@@ -12,6 +13,9 @@ public class UIScript : MonoBehaviour
     public TextMeshProUGUI hpText;
     public TextMeshProUGUI speedUpText;
     public TextMeshProUGUI LevelText;
+
+    [SerializeField]
+    private Image xpBar;
 
 
     public GameObject player;
@@ -75,5 +79,10 @@ public class UIScript : MonoBehaviour
     public void EnterMenu()
     {
         menu.SetActive(true);
+    }
+
+    public void addXp(float amount)
+    {
+        xpBar.fillAmount = amount;
     }
 }
