@@ -182,16 +182,7 @@ public class PlayerControls : MonoBehaviour
 
 
     }
-    //getting hit
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Enemy"))
-        {
-            hP -= collision.gameObject.GetComponent<EnemyScript>().damage;
-            Ui.GetComponent<UIScript>().HpTextUpdate(hP);
-        }
-
-    }
+   
 
     private void Dash()
     {
