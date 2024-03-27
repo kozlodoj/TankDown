@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class StatsScript : LevelSystem
 {
+
+
+    private Dictionary<string, int> Stats = new Dictionary<string, int>();
     private int xp;
     private int level;
     [SerializeField]
@@ -19,10 +22,15 @@ public class StatsScript : LevelSystem
     // Start is called before the first frame update
     void Start()
     {
+        FillInStats();
         xp = 20000;
         UI.GetComponent<UIScript>().LevelTextSetUp(Level(xp), xp);
         hp = HP(4);
-        Debug.Log(hp);
+
+        foreach (var stat in Stats)
+        {
+            Debug.Log(stat);
+        }
         
     }
 
@@ -39,6 +47,16 @@ public class StatsScript : LevelSystem
             hp -= collision.gameObject.GetComponent<EnemyScript>().damage;
             UI.GetComponent<UIScript>().HpTextUpdate(hp);
         }
+
+    }
+
+    private void FillInStats()
+    {
+        Stats.Add("HP", 1);
+        Stats.Add("Attack", 1);
+        Stats.Add("Defence", 1);
+        Stats.Add("Speed", 1);
+        Stats.Add("Luck", 1);
 
     }
 }
