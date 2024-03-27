@@ -2574,6 +2574,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelsList: 
+  hp: 0
   UI: {fileID: 154259003}
 --- !u!1 &2000947084
 GameObject:
@@ -2797,6 +2798,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Speed Up
       objectReference: {fileID: 0}
+    - target: {fileID: 6942260273747377565, guid: ac1171b8b19a54bd6bba02c250174c42, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8803108847191032680, guid: ac1171b8b19a54bd6bba02c250174c42, type: 3}
       propertyPath: m_LocalPosition.x
       value: 4
@@ -2896,7 +2901,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3409251350687983416, guid: b9dfdfd7865e4439eadc430a3fe8e679, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3409251350687983416, guid: b9dfdfd7865e4439eadc430a3fe8e679, type: 3}
       propertyPath: m_TagString
@@ -2918,6 +2923,10 @@ PrefabInstance:
     - target: {fileID: 566914342613099905, guid: 520d0f5d62c4148dfac2e00bff0bd1c4, type: 3}
       propertyPath: m_Name
       value: Basic Canon
+      objectReference: {fileID: 0}
+    - target: {fileID: 566914342613099905, guid: 520d0f5d62c4148dfac2e00bff0bd1c4, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 566914342613099905, guid: 520d0f5d62c4148dfac2e00bff0bd1c4, type: 3}
       propertyPath: m_TagString
