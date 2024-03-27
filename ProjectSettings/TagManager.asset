@@ -13,6 +13,8 @@ TagManager:
   - Weapon
   - SpeedUp
   - Weapon Pickup
+  - Minus Button
+  - Plus Button
   layers:
   - Default
   - TransparentFX

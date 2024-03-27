@@ -6,9 +6,17 @@ public class StatsScript : LevelSystem
 {
 
 
-    private Dictionary<string, int> Stats = new Dictionary<string, int>();
+    private Dictionary<string, int> Stats = new Dictionary<string, int>()
+    {
+        { "Attack", 1 },
+        { "Defence", 1 },
+        { "Luck", 1 },
+        { "Speed", 1 },
+        { "HP", 1 }
+    };
     private int xp;
     private int level;
+    private int statPoints = 5;
     [SerializeField]
     private float hp;
     private float attack;
@@ -22,23 +30,16 @@ public class StatsScript : LevelSystem
     // Start is called before the first frame update
     void Start()
     {
-        FillInStats();
-        xp = 20000;
+        
+        xp = 90;
+        level = Level(xp);
         UI.GetComponent<UIScript>().LevelTextSetUp(Level(xp), xp);
         hp = HP(4);
 
-        foreach (var stat in Stats)
-        {
-            Debug.Log(stat);
-        }
         
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+   
     //getting hit
     private void OnCollisionEnter(Collision collision)
     {
@@ -50,13 +51,41 @@ public class StatsScript : LevelSystem
 
     }
 
-    private void FillInStats()
+    public void FillInStats(Dictionary<string, int> stats)
     {
-        Stats.Add("HP", 1);
-        Stats.Add("Attack", 1);
-        Stats.Add("Defence", 1);
-        Stats.Add("Speed", 1);
-        Stats.Add("Luck", 1);
+        Stats = stats;
+       
 
+    }
+    public Dictionary<string, int> GetStatDictionary()
+    {
+        var result = new Dictionary<string, int>();
+        foreach (var stat in Stats)
+        {
+            result.Add(stat.Key, stat.Value);
+            
+        }
+
+
+        return result;
+    }
+    public Dictionary<string, int> GetLevelExp()
+    {
+        var result = new Dictionary<string, int>();
+        result.Add("Level", level);
+        result.Add("Exp", xp);
+        return result;
+
+    }
+
+    public int GetStatPoints()
+    {
+        return statPoints;
+    }
+
+    public void AddXp(int xpToAdd)
+    {
+        xp += xpToAdd;
+        UI.GetComponent<UIScript>().LevelTextSetUp(Level(xp), xp);
     }
 }
